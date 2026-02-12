@@ -19,7 +19,10 @@ class MyApp extends StatelessWidget {
       builder: DevicePreview.appBuilder,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        ),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -52,7 +55,50 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Text('Hello World', style:TextStyle(color: Colors.amber)),
+        child: Container(
+          color: Colors.red,
+          height: 400,
+          width: double.infinity,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 200,
+                width: 200,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey,
+                ),
+                child: Container(
+                  height: 100,
+                  width: 200,
+                  padding: const EdgeInsets.all(20),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.blue,
+                  ),
+                  child: Text(
+                    'Click the plus button to increment the counter',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.amber, fontSize: 20),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Counter: $_counter',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
