@@ -39,11 +39,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  bool _showFlutter = false;
 
-  void _incrementCounter() {
+  void _hideFlutter() {
     setState(() {
-      _counter++;
+      _showFlutter = false;
     });
   }
 
@@ -53,57 +53,69 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-      ),
-      body: Center(
-        child: Container(
-          color: Colors.red,
-          height: 400,
-          width: double.infinity,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                height: 200,
-                width: 200,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey,
-                ),
-                child: Container(
-                  height: 100,
-                  width: 200,
-                  padding: const EdgeInsets.all(20),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.blue,
-                  ),
-                  child: Text(
-                    'Click the plus button to increment the counter',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.amber, fontSize: 20),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Counter: $_counter',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.notification_add, color: Colors.red),
+          onPressed: () {
+            print('flutter');
+            setState(() {
+              _showFlutter = true;
+            });
+          },
         ),
       ),
+      body: Stack(
+        children: [
+          // Background image covering entire screen
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/bg.jpg',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback if image doesn't load
+                return Container(color: Colors.black);
+              },
+            ),
+          ),
+          // Red ListTile at the top
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              color: Colors.red,
+              child: ListTile(
+                leading: Icon(Icons.join_full),
+                title: Text('Data'),
+                trailing: Text('ERP'),
+                onTap: () {
+                  print('flutter');
+                  setState(() {
+                    _showFlutter = true;
+                  });
+                },
+              ),
+            ),
+          ),
+          // "Flutter" text in center when shown
+          if (_showFlutter)
+            Center(
+              child: Text(
+                'Flutter',
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        onPressed: _hideFlutter,
+        tooltip: 'Press to make the text disappear',
+        child: const Icon(
+          Icons.remove,
+        ), // Changed from Icons.add to Icons.remove
       ),
     );
   }
