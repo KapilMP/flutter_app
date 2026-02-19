@@ -1,126 +1,55 @@
-// import 'package:device_preview/device_preview.dart';
-// import 'package:flutter/foundation.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/views/widget_tree.dart';
+
+// stateful widget can be refreshed and updated, stateless widget
+// cannot be updated once built
+
+//? stateless widget can not be refreshed or updated,
+//? it is immutable and can only be built once.
+//? It does not have any internal state that can change over time.
+//? Once a stateless widget is built, it cannot be modified or updated.
+//? If you want to update the UI based on user interactions or changes in data,
+//? you would need to use a stateful widget instead.
+
+//! setState is a method used in stateful widgets to trigger
+//! a rebuild of the widget tree.
+//! When you call setState, it tells Flutter that the state of the widget has
+//! changed and that it needs to rebuild the UI to reflect those changes.
+//! The setState method takes a callback function as an argument,
+//! and any changes to the state should be made within that callback.
+
+// Materail App (Stateful)
+// Scaffold
+// App Title
+// Bottom navigation bar setState
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(enabled: !kIsWeb, builder: (context) => const MyHomePage()),
+  );
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyAppState extends State<MyApp> {
-  int selectedIndex = 0;
-  int counter = 0;
-
-  static const List<String> labels = ['Home', 'Search', 'Settings', 'Profile'];
-
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.red,
+          seedColor: Colors.deepPurple,
           brightness: Brightness.dark,
         ),
       ),
-      home: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Flutter View'),
-            centerTitle: true,
-            // leading: Icon(Icons.menu),
-            // actions: [Text('Login'), Icon(Icons.login)],
-            backgroundColor: Colors.teal,
-          ),
-          drawer: Drawer(
-            child: Column(
-              children: [
-                // DrawerHeader(child: Text('Drawer Header')),
-                ListTile(
-                  title: Text('Settings'),
-                  leading: Icon(Icons.settings),
-                ),
-                ListTile(title: Text('Logout'), leading: Icon(Icons.logout)),
-              ],
-            ),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Counter: $counter',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Selected: ${labels[selectedIndex]} (index: $selectedIndex)',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
-          ),
-          floatingActionButton: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    counter += 1;
-                  });
-                },
-                child: const Icon(Icons.add),
-              ),
-              SizedBox(height: 10),
-              FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    counter -= 1;
-                  });
-                },
-                child: const Icon(Icons.remove),
-              ),
-              SizedBox(height: 10),
-              FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    counter = 0;
-                  });
-                },
-                child: const Icon(Icons.refresh),
-              ),
-            ],
-          ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: selectedIndex,
-            destinations: const [
-              NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-              NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
-              NavigationDestination(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-              NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
-            ],
-            onDestinationSelected: (int value) {
-              setState(() {
-                selectedIndex = value;
-              });
-              // debug print kept for quick verification
-              print(value);
-            },
-          ),
-        ),
-      ),
+      home: WidgetTree(),
     );
   }
 }
