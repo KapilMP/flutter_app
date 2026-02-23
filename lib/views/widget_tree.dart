@@ -1,46 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/data/notifiers.dart';
 import 'package:flutter_app/views/pages/code_page.dart';
 import 'package:flutter_app/views/pages/home_page.dart';
-import 'package:flutter_app/views/pages/widget_page.dart';
-import 'package:flutter_app/widgets/navbar_widget.dart';
+import 'package:flutter_app/views/pages/profile_page.dart';
+import 'package:flutter_app/views/widgets/navbar_widget.dart';
 
-class WidgetTree extends StatefulWidget {
+class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});
 
-  @override
-  State<WidgetTree> createState() => _WidgetTreeState();
-}
-
-class _WidgetTreeState extends State<WidgetTree> {
   static const List<NavItem> _navItems = [
-    NavItem(icon: Icons.home, label: "Home"),
-    NavItem(icon: Icons.code, label: "Code"),
-    NavItem(icon: Icons.widgets, label: "Widget"),
+    NavItem(icon: Icons.home, label: 'Home'),
+    NavItem(icon: Icons.code, label: 'Code'),
+    NavItem(icon: Icons.person, label: 'Profile'),
   ];
 
-  int _selectedIndex = 0;
+  static const List<Widget> _pages = [HomePage(), CodePage(), WidgetPage()];
 
   @override
   Widget build(BuildContext context) {
-    final currentText = _navItems[_selectedIndex].label;
-    final pages = const [
-      HomePage(),
-      CodePage(),
-      WidgetPage(),
-    ];
+    return ValueListenableBuilder<int>(
+      valueListenable: selectedPageNotifier,
+      builder: (context, selectedIndex, child) {
+        final currentTitle = _navItems[selectedIndex].label;
 
-    return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text(currentText)),
-      body: pages[_selectedIndex],
-      bottomNavigationBar: NavbarWidget(
-        items: _navItems,
-        selectedIndex: _selectedIndex,
-        onItemSelected: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(currentTitle),
+            actions: [
+              ValueListenableBuilder<ThemeMode>(
+                valueListenable: themeModeNotifier,
+                builder: (context, themeMode, child) {
+                  final isDarkMode = themeMode == ThemeMode.dark;
+
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
+                      Switch(
+                        value: isDarkMode,
+                        onChanged: (_) => toggleThemeMode(),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+          body: _pages[selectedIndex],
+          bottomNavigationBar: NavbarWidget(
+            items: _navItems,
+            selectedIndex: selectedIndex,
+            onItemSelected: (index) {
+              selectedPageNotifier.value = index;
+            },
+          ),
+        );
+      },
     );
   }
 }
